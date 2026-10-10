@@ -1,0 +1,31 @@
+/* Accueil Producteur */
+.home{flex:1;display:flex;flex-direction:column;gap:18px;padding:12px 24px 28px}
+.home h1{margin:6px 0 0;font-size:34px;line-height:1.08;font-weight:500;letter-spacing:-.01em}
+.home h1 b{display:block;font-weight:700}
+
+.parcel{position:relative;overflow:hidden;min-height:190px;border-radius:26px;background:var(--forest);color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:flex-end}
+.parcel svg{position:absolute;inset:0;width:100%;height:100%}
+.parcel .body{position:relative}
+.parcel .label{margin:0 0 6px;font-size:15px;color:#c4dfce}
+.parcel h2{margin:0;font-size:27px;line-height:1.15;font-weight:700}
+.parcel .meta{margin:4px 0 0;color:#c4dfce;font-size:16px}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:6px 14px 6px 10px;border-radius:99px;background:var(--yellow);color:var(--ink);font-weight:700;font-size:15px;letter-spacing:.04em}
+.chip::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--forest)}
+
+.cta{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;width:100%;border:0;border-radius:18px;background:var(--green);color:#fff;font-size:20px;font-weight:700;cursor:pointer;transition:transform .1s}
+.cta:active{transform:scale(.985)}
+.cta svg{width:28px;height:28px}
+
+.last{border:1.5px solid var(--line);border-radius:22px;background:#fff;padding:18px}
+.last h3{margin:0 0 14px;font-size:16px;font-weight:600;color:var(--mut)}
+.last .row{display:flex;gap:14px;align-items:center}
+.thumb{flex:none;width:68px;height:68px;border-radius:16px;background:#E6F4EC;display:grid;place-items:center;color:var(--green)}
+.thumb svg{width:36px;height:36px}
+.last strong{display:block;font-size:19px;line-height:1.2;font-weight:700}
+.last .sub{margin-top:3px;color:var(--mut);font-size:15px}
+.conf{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:15px;font-weight:600}
+.conf .bars{display:flex;gap:4px}
+.conf .bars i{width:30px;height:8px;border-radius:4px;background:var(--line)}
+.conf .bars i.f{background:var(--green)}
+.more{display:block;margin:10px 0 -6px;min-height:48px;padding:0;border:0;background:none;color:var(--green);font-size:17px;font-weight:700;cursor:pointer;text-align:left}
+.empty-last{margin:0;color:var(--mut)}
