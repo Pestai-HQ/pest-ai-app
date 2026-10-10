@@ -7,6 +7,7 @@ import { mountCapture } from './screens/capture.js';
 import { mountVerify } from './screens/verify.js';
 import { mountAnalyse } from './screens/analyse.js';
 import { mountResult } from './screens/result.js';
+import { mountAdvice } from './screens/advice.js';
 
 const app = document.getElementById('app');
 const splash = document.getElementById('splash');
@@ -19,6 +20,7 @@ register('capture', mountCapture);
 register('verify', mountVerify);
 register('analyse', mountAnalyse);
 register('result', mountResult);
+register('advice', mountAdvice);
 go('login');
 
 // Retour du réseau : les analyses en attente se terminent (simulation tant que le back-end n'est pas branché).
