@@ -3,7 +3,7 @@ import { fieldDisc } from '../components/field.js';
 import { navbar, icon, toast, topbar, offlineBar, watchNetwork } from '../components/navbar.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
-const art = `<svg class="art" viewBox="0 0 152 120" aria-hidden="true">${fieldDisc({ cx: 104, cy: 36, r: 62, gap: '#12351F', dot: 6 })}</svg>`;
+const art = `<svg class="art" viewBox="0 0 152 100" aria-hidden="true">${fieldDisc({ cx: 124, cy: 24, r: 56, gap: '#12351F', dot: 6 })}</svg>`;
 const leaf = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19c3-5 6-8 10-10"/></svg>';
 
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -18,7 +18,7 @@ const season = c => {
 
 function skeleton() {
   return `<div class="shell">${offlineBar()}${topbar()}
-  <main class="home" aria-busy="true" aria-label="Chargement"><div class="sk" style="height:4.2rem;width:62%"></div><div class="sk" style="height:15rem"></div><div class="sk" style="height:4rem"></div><div class="sk" style="height:10rem"></div></main>${navbar('home')}</div>`;
+  <main class="home" aria-busy="true" aria-label="Chargement"><div class="sk" style="height:3.2rem;width:62%"></div><div class="sk" style="height:12.5rem"></div><div class="sk" style="height:4rem"></div><div class="sk" style="height:10rem"></div></main>${navbar('home')}</div>`;
 }
 
 function view(d) {
@@ -31,10 +31,10 @@ function view(d) {
     : '<div class="head"><h3>Dernier diagnostic</h3></div><p class="empty-last">Aucun diagnostic pour l\'instant. Photographiez une feuille touchée pour commencer.</p>';
   return `<div class="shell">${offlineBar()}${topbar()}
   <main class="home">
-    <div class="hello"><p class="date">${today()}</p><h1>Bonjour, ${d.first}</h1></div>
+    <div class="hello"><h1>Bonjour, ${d.first}</h1><p class="date">${today()}</p></div>
     <section class="parcel" aria-label="Parcelle active">${art}
-      <p class="label">Parcelle active</p><h2>${p.name}</h2><p class="meta">${p.crop} · ${p.area}</p>
       <button class="chip" data-act="copy" data-code="${p.agroid}" aria-label="Copier l'AgroID ${p.agroid}">${p.agroid}${icon('copy')}</button>
+      <h2>${p.name}</h2><p class="meta">${p.crop} · ${p.area}</p>
       <div class="progress"><div class="row"><span>${d.campaign.label}</span><span>Jour ${s.day} sur ${s.total}</span></div>
         <div class="track" role="progressbar" aria-label="Avancement de la campagne" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.pct}"><i style="width:${s.pct}%"></i></div></div>
     </section>
