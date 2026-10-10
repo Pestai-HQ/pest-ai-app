@@ -1,5 +1,4 @@
 import { go, ctx } from '../router.js';
-import { toast } from '../components/navbar.js';
 import { ic } from '../components/icons.js';
 import { faryPlayer, bindFary } from '../components/fary.js';
 
@@ -37,7 +36,7 @@ export function mountResult(root) {
   const $ = s => root.querySelector(s), on = (s, f) => { const el = $(s); if (el) el.onclick = f; };
   on('#back', () => go('home')); on('#home', () => go('home'));
   on('#redo', () => go('capture')); on('#redo2', () => go('capture'));
-  on('#advice', () => toast('Le conseil arrive bientôt.')); on('#advice2', () => toast('Le conseil arrive bientôt.'));
+  on('#advice', () => go('advice')); on('#advice2', () => go('advice'));
   const stopAudio = queued ? () => {} : bindFary(root, `${r.problem}. Confiance ${WORD[r.confidence]}. ${r.symptoms.join('. ')}. Résultat à confirmer avec un agronome.`);
   return stopAudio;
 }
