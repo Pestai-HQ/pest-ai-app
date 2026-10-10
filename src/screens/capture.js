@@ -9,12 +9,16 @@ export function mountCapture(root) {
     <div class="frame" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="tip">Cadrez une feuille touchée</span></div>
     <div class="cap-bottom">
       <ul class="checks"><li>${ic('sun')}Lumière</li><li>${ic('focus')}Netteté</li><li>${ic('leaf')}Une feuille</li></ul>
-      <button class="shutter" id="shutter" aria-label="Prendre la photo" disabled><span></span></button>
-      <span class="lbl">Prendre la photo</span>
+      <div class="trio">
+        <button class="side" id="gallery"><span class="sq">${ic('image')}</span>Galerie</button>
+        <div class="mid"><button class="shutter" id="shutter" aria-label="Prendre la photo" disabled><span></span></button><span class="lbl">Prendre la photo</span></div>
+        <span></span>
+      </div>
     </div>
     <div class="nocam" id="nocam" hidden role="alert"><div>${ic('camera')}<h2>Caméra indisponible</h2><p id="nocam-msg"></p>
       <button class="btn main" id="fallback">Ouvrir l'appareil photo du téléphone</button></div></div>
     <input id="file" type="file" accept="image/*" capture="environment" hidden>
+    <input id="pick" type="file" accept="image/*" hidden>
     <div class="flash" id="flash"></div></div>`;
   const $ = s => root.querySelector(s);
   let stream, alive = true;
@@ -37,9 +41,11 @@ export function mountCapture(root) {
   $('#shutter').onclick = () => {
     const v = $('#vid'); if (!v.videoWidth) return;
     $('#flash').classList.add('on'); if (navigator.vibrate) navigator.vibrate(15);
-    ctx.photo = fromVideo(v); go('verify');
+    ctx.photo = fromVideo(v); ctx.source = 'CAMERA'; go('verify');
   };
   $('#fallback').onclick = () => $('#file').click();
-  $('#file').onchange = async e => { const f = e.target.files[0]; if (!f) return; ctx.photo = await fromFile(f); go('verify'); };
+  $('#file').onchange = async e => { const f = e.target.files[0]; if (!f) return; ctx.photo = await fromFile(f); ctx.source = 'CAMERA'; go('verify'); };
+  $('#gallery').onclick = () => $('#pick').click();
+  $('#pick').onchange = async e => { const f = e.target.files[0]; if (!f) return; ctx.photo = await fromFile(f); ctx.source = 'GALLERY'; go('verify'); };
   return stop;
 }
