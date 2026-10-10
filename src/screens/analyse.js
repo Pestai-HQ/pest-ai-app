@@ -15,7 +15,7 @@ export function mountAnalyse(root) {
   if (online) { timers.push(setTimeout(() => mark(1), 1200), setTimeout(() => mark(2), 2400)); }
   (async () => {
     const small = await thumb(ctx.photo);
-    const result = await api.diagnose(small, ctx.parcel);
+    const result = await api.diagnose(small, ctx.parcel, ctx.source || 'CAMERA');
     if (!alive) return;
     mark(steps.length);
     timers.push(setTimeout(() => go('result', { result, from: 'analyse' }), 500));
