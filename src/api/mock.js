@@ -33,10 +33,10 @@ export const api = {
   },
   // Une demande = une parcelle + une seule photo. L'id est créé sur le téléphone (renvoi sans doublon après coupure).
   // Hors connexion : la photo est gardée et l'analyse est différée (décision D-03 proposée).
-  async diagnose(photo, parcel) {
+  async diagnose(photo, parcel, source = 'CAMERA') {
     const online = navigator.onLine;
     await wait(online ? 3600 : 1200);
-    const base = { id: uuid(), parcel_id: parcel.id, captured_at: new Date().toISOString(), photo };
+    const base = { id: uuid(), parcel_id: parcel.id, captured_at: new Date().toISOString(), photo, source };
     const item = online ? { ...base, ...next(), sync: 'SYNCED' } : { ...base, problem: null, confidence: 0, symptoms: [], steps: [], sync: 'PENDING' };
     write([item, ...read()]);
     return item;
