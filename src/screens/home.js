@@ -1,4 +1,5 @@
 import { api } from '../api/mock.js';
+import { go, ctx } from '../router.js';
 import { fieldDisc } from '../components/field.js';
 import { navbar, icon, toast, topbar, offlineBar, watchNetwork } from '../components/navbar.js';
 
@@ -22,13 +23,13 @@ function skeleton() {
 }
 
 function view(d) {
-  const l = d.last, p = d.parcel, s = season(d.campaign);
-  const last = l
-    ? `<div class="head"><h3>Dernier diagnostic</h3><span class="badge" ${l.sync === 'SYNCED' ? '' : 'data-wait="true"'}>${icon(l.sync === 'SYNCED' ? 'check' : 'clock')}${l.sync === 'SYNCED' ? 'Envoyé' : 'En attente d\'envoi'}</span></div>
-       <div class="row"><div class="thumb">${leaf}</div><div><strong>${l.problem}</strong><div class="sub">${relDate(l.captured_at)}</div></div></div>
-       <div class="conf"><span class="bars" aria-hidden="true">${[1, 2, 3].map(i => `<i class="${i <= l.confidence ? 'f' : ''}"></i>`).join('')}</span>Confiance ${level(l.confidence)}</div>
-       <button class="more" data-act="advice">Voir quoi faire</button>`
-    : '<div class="head"><h3>Dernier diagnostic</h3></div><p class="empty-last">Aucun diagnostic pour l\'instant. Photographiez une feuille touchée pour commencer.</p>';
+  const l = d.last, p = d.parcel, s = season(d.campaign), queued = !l.problem;
+  const badge = `<span class="badge" ${l.sync === 'SYNCED' ? '' : 'data-wait="true"'}>${icon(l.sync === 'SYNCED' ? 'check' : 'clock')}${l.sync === 'SYNCED' ? 'Envoyé' : 'En attente d\'envoi'}</span>`;
+  const thumb = `<div class="thumb">${l.photo ? `<img src="${l.photo}" alt="Photo du dernier diagnostic">` : leaf}</div>`;
+  const last = `<div class="head"><h3>Dernier diagnostic</h3>${badge}</div>
+    <div class="row">${thumb}<div><strong>${queued ? 'Analyse en attente' : l.problem}</strong><div class="sub">${relDate(l.captured_at)}</div></div></div>` +
+    (queued ? '' : `<div class="conf"><span class="bars" aria-hidden="true">${[1, 2, 3].map(i => `<i class="${i <= l.confidence ? 'f' : ''}"></i>`).join('')}</span>Confiance ${level(l.confidence)}</div>`) +
+    `<button class="more" data-act="open">Voir le résultat</button>`;
   return `<div class="shell">${offlineBar()}${topbar()}
   <main class="home">
     <div class="hello"><h1>Bonjour, ${d.first}</h1><p class="date">${today()}</p></div>
@@ -43,19 +44,23 @@ function view(d) {
   </main>${navbar('home')}</div>`;
 }
 
-export async function mountHome(root, { user }) {
+export function mountHome(root) {
   css('/styles/shell.css'); css('/styles/home.css');
   root.innerHTML = skeleton(); watchNetwork();
-  const data = await api.home(user);
-  root.innerHTML = view(data); watchNetwork();
+  let alive = true, data;
+  api.home(ctx.user).then(d => {
+    if (!alive) return;
+    data = d; ctx.parcel = d.parcel;
+    root.innerHTML = view(d); watchNetwork();
+  });
   root.onclick = async e => {
     const el = e.target.closest('[data-tab],[data-act]');
-    if (!el) return;
+    if (!el || !data) return;
     if (el.dataset.act === 'copy') {
       try { await navigator.clipboard.writeText(el.dataset.code); toast('AgroID copié.'); } catch (_) { toast('Copie impossible sur cet appareil.'); }
-      return;
-    }
-    if (el.dataset.tab === 'home') return;
-    toast('Cet écran arrive bientôt.');   // Les autres écrans sont construits un par un.
+    } else if (el.dataset.act === 'diagnose' || el.dataset.tab === 'diagnostic') go('capture');
+    else if (el.dataset.act === 'open') go('result', { result: data.last, photo: null });
+    else if (el.dataset.tab !== 'home') toast('Cet écran arrive bientôt.');
   };
+  return () => { alive = false; root.onclick = null; };
 }
