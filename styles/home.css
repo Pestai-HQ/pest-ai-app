@@ -1,16 +1,15 @@
 /* Accueil Producteur */
-.home{flex:1;display:flex;flex-direction:column;gap:1.1rem;padding:.75rem 1.5rem 1.75rem}
-.hello .date{margin:0;color:var(--mut);font-size:.95rem}
-.hello h1{margin:.1rem 0 0;font-size:2.1rem;line-height:1.1;font-weight:700;letter-spacing:-.015em;color:var(--forest)}
+.home{flex:1;display:flex;flex-direction:column;gap:.9rem;padding:.5rem 1.5rem 1.75rem}
+.hello h1{margin:0;font-size:1.85rem;line-height:1.1;font-weight:700;letter-spacing:-.015em;color:var(--forest)}
+.hello .date{margin:.2rem 0 0;color:var(--mut);font-size:.95rem}
 
-.parcel{position:relative;overflow:hidden;border-radius:26px;background:var(--forest);color:#fff;padding:1.25rem;box-shadow:var(--shadow)}
-.parcel .art{position:absolute;top:0;right:0;width:9.5rem;height:7.5rem;pointer-events:none}
-.parcel .label{position:relative;margin:0;color:#C4DFCE;font-size:.95rem}
-.parcel h2{position:relative;margin:2.4rem 0 .15rem;max-width:15rem;font-size:1.65rem;line-height:1.12;font-weight:700}
+.parcel{position:relative;overflow:hidden;border-radius:26px;background:var(--forest);color:#fff;padding:1.1rem 1.25rem 1.2rem;box-shadow:var(--shadow)}
+.parcel .art{position:absolute;top:0;right:0;width:9.5rem;height:6.25rem;pointer-events:none}
+.parcel h2{position:relative;margin:.9rem 0 .1rem;font-size:1.6rem;line-height:1.12;font-weight:700}
 .parcel .meta{position:relative;margin:0;color:#C4DFCE;font-size:1rem}
-.chip{position:relative;display:inline-flex;align-items:center;gap:.55rem;min-height:2.75rem;margin-top:1rem;padding:0 1rem 0 .8rem;border:0;border-radius:99px;background:var(--yellow);color:var(--ink);font-weight:700;font-size:1rem;letter-spacing:.05em;font-variant-numeric:tabular-nums;cursor:pointer}
+.chip{position:relative;display:inline-flex;align-items:center;gap:.55rem;min-height:2.75rem;margin:0;padding:0 1rem 0 .8rem;border:0;border-radius:99px;background:var(--yellow);color:var(--ink);font-weight:700;font-size:1rem;letter-spacing:.05em;font-variant-numeric:tabular-nums;cursor:pointer}
 .chip svg{width:1.15rem;height:1.15rem}
-.progress{position:relative;margin-top:1.15rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.18)}
+.progress{position:relative;margin-top:.9rem;padding-top:.8rem;border-top:1px solid rgba(255,255,255,.18)}
 .progress .row{display:flex;justify-content:space-between;gap:1rem;font-size:.95rem}
 .progress .row span:last-child{color:#C4DFCE}
 .track{height:.5rem;margin-top:.6rem;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
