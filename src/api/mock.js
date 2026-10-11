@@ -31,6 +31,13 @@ const VARIANTS = [
 ];
 const next = () => { const n = Number(localStorage.getItem(CNT) || 0); localStorage.setItem(CNT, n + 1); return VARIANTS[n % VARIANTS.length]; };
 
+// Exemples affichés tant qu'aucun vrai diagnostic n'a été fait (démonstration).
+const seed = () => [
+  { id: 'demo-1', ...VARIANTS[0], captured_at: daysFromNow(-1), sync: 'SYNCED', photo: null, parcel_id: 'demo-parcel-1' },
+  { id: 'demo-2', ...VARIANTS[1], captured_at: daysFromNow(-6), sync: 'SYNCED', photo: null, parcel_id: 'demo-parcel-1' },
+  { id: 'demo-3', ...VARIANTS[2], captured_at: daysFromNow(-13), sync: 'SYNCED', photo: null, parcel_id: 'demo-parcel-1' }
+];
+
 export const api = {
   // Démo : tout numéro à 9 chiffres et tout code de 4 chiffres ou plus est accepté, sauf le code 0000 (simule une erreur).
   async login(phone, code) {
@@ -40,14 +47,16 @@ export const api = {
   },
   async home(user) {
     await wait(650);
-    const h = read();
+    const h = await api.history();
     return {
       first: user.first,
       parcel: { id: 'demo-parcel-1', name: 'Parcelle Niayes 1', crop: 'Tomate', agroid: 'AGR-SN-000123', area: '1,2 ha' },
       campaign: { label: 'Contre-saison 2026', start: daysFromNow(-40), end: daysFromNow(70) },
-      last: h[0] || { id: 'demo-diag-1', ...VARIANTS[0], captured_at: daysFromNow(-1), sync: 'SYNCED', photo: null }
+      last: h[0]
     };
   },
+  // Historique : les diagnostics du téléphone, du plus récent au plus ancien.
+  async history() { const h = read(); return h.length ? h : seed(); },
   // Une demande = une parcelle + une seule photo. L'id est créé sur le téléphone (renvoi sans doublon après coupure).
   // Hors connexion : la photo est gardée et l'analyse est différée (décision D-03 proposée).
   async diagnose(photo, parcel, source = 'CAMERA') {
