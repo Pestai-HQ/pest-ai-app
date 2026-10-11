@@ -43,7 +43,7 @@ export function mountHistory(root) {
   let alive = true, items = [];
   api.history().then(l => { if (!alive) return; items = l; root.innerHTML = shell(view(l)); watchNetwork(); });
   const unbind = bindNav(root, 'history', el => {
-    if (el.dataset.act === 'open') { const d = items.find(x => x.id === el.dataset.id); if (d) go('result', { result: d, photo: null, back: 'history' }); return true; }
+    if (el.dataset.act === 'open') { const d = items.find(x => x.id === el.dataset.id); if (d) go('result', { result: d, photo: null, back: 'history', detailParcel: null }); return true; }
     return false;
   });
   return () => { alive = false; unbind(); };
