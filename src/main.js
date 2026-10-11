@@ -10,6 +10,8 @@ import { mountResult } from './screens/result.js';
 import { mountAdvice } from './screens/advice.js';
 import { mountHistory } from './screens/history.js';
 import { mountQr } from './screens/qrcode.js';
+import { mountParcels } from './screens/parcels.js';
+import { mountParcel } from './screens/parcel.js';
 
 const app = document.getElementById('app');
 const splash = document.getElementById('splash');
@@ -25,6 +27,8 @@ register('result', mountResult);
 register('advice', mountAdvice);
 register('history', mountHistory);
 register('qr', mountQr);
+register('parcels', mountParcels);
+register('parcel', mountParcel);
 go('login');
 
 // Retour du réseau : les analyses en attente se terminent (simulation tant que le back-end n'est pas branché).
