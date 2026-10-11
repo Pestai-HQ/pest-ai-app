@@ -3,6 +3,9 @@ import { go, ctx } from '../router.js';
 import { qrSvg } from '../components/qr.js';
 import { navbar, icon, toast, topbar, offlineBar, watchNetwork } from '../components/navbar.js';
 import { bindNav } from '../components/nav.js';
+import { pic } from '../components/pictos.js';
+import { getWeather } from '../api/weather.js';
+import { weatherView, weatherPlaceholder } from '../components/weather.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
 const leaf = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19c3-5 6-8 10-10"/></svg>';
@@ -37,6 +40,7 @@ function view(d) {
   return `<div class="shell">${offlineBar()}${topbar()}
   <main class="home">
     <div class="hello"><h1>Bonjour, ${d.first}</h1><p class="date">${today()}</p></div>
+    <section class="wx" id="wx" aria-label="Météo de la parcelle">${weatherPlaceholder()}</section>
     <section class="parcel" aria-label="Parcelle active">
       <div class="ptop"><div class="pleft"><p class="label">Parcelle active</p><h2>${p.name}</h2><p class="meta">${p.crop} · ${p.area}</p></div>
         <button class="qrtile" data-act="qr" aria-label="Afficher le QR code de la parcelle ${p.name}"><span class="qrbox">${qrSvg(p.agroid)}</span><span>Mon QR code</span></button></div>
@@ -44,19 +48,29 @@ function view(d) {
       <div class="progress"><div class="row"><span>${d.campaign.label}</span><span>Jour ${s.day} sur ${s.total}</span></div>
         <div class="track" role="progressbar" aria-label="Avancement de la campagne" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.pct}"><i style="width:${s.pct}%"></i></div></div>
     </section>
-    <button class="cta" data-act="diagnose">${icon('camera')}Diagnostiquer</button>
+    <section class="dcard" aria-label="Faire un diagnostic">
+      <ol class="journey">
+        <li><span class="jp">${pic('camera')}</span><span>Prenez une photo</span></li><li class="jc" aria-hidden="true">${pic('chevron')}</li>
+        <li><span class="jp">${pic('sprout')}</span><span>Lisez le résultat</span></li><li class="jc" aria-hidden="true">${pic('chevron')}</li>
+        <li><span class="jp jf"><img src="/assets/fary.png" alt=""></span><span>Écoutez le conseil</span></li>
+      </ol>
+      <button class="cta" data-act="diagnose">${icon('camera')}Diagnostiquer</button>
+    </section>
     <section class="last" aria-label="Dernier diagnostic">${last}</section>
+    <a class="wa" href="https://wa.me/221706669438?text=${encodeURIComponent('Bonjour PEST AI, j\'ai une question sur l\'application.')}" target="_blank" rel="noopener noreferrer" aria-label="Une question ? Contactez-nous sur WhatsApp au +221 70 666 94 38">
+      <img src="/assets/contact-whatsapp.webp" alt="Une question ? Contactez-nous. WhatsApp : +221 70 666 94 38" loading="lazy"></a>
   </main>${navbar('home')}</div>`;
 }
 
 export function mountHome(root) {
-  css('/styles/shell.css'); css('/styles/home.css'); css('/styles/qr.css');
+  css('/styles/shell.css'); css('/styles/home.css'); css('/styles/qr.css'); css('/styles/home2.css');
   root.innerHTML = skeleton(); watchNetwork();
   let alive = true, data;
   api.home(ctx.user, ctx.parcel && ctx.parcel.id).then(d => {
     if (!alive) return;
     data = d; ctx.parcel = d.parcel;
     root.innerHTML = view(d); watchNetwork();
+    getWeather(d.parcel.lat, d.parcel.lon).then(w => { const el = alive && root.querySelector('#wx'); if (el) el.innerHTML = weatherView(w, d.parcel.location || ''); });
   });
   const unbind = bindNav(root, 'home', el => {
     if (!data) return true;
