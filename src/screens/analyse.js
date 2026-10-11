@@ -18,7 +18,7 @@ export function mountAnalyse(root) {
     const result = await api.diagnose(small, ctx.parcel, ctx.source || 'CAMERA');
     if (!alive) return;
     mark(steps.length);
-    timers.push(setTimeout(() => go('result', { result, from: 'analyse' }), 500));
+    timers.push(setTimeout(() => go('result', { result, back: 'home' }), 500));
   })();
   return () => { alive = false; timers.forEach(clearTimeout); };
 }
