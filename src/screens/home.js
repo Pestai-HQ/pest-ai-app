@@ -1,11 +1,10 @@
 import { api } from '../api/mock.js';
 import { go, ctx } from '../router.js';
-import { fieldDisc } from '../components/field.js';
+import { qrSvg } from '../components/qr.js';
 import { navbar, icon, toast, topbar, offlineBar, watchNetwork } from '../components/navbar.js';
 import { bindNav } from '../components/nav.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
-const art = `<svg class="art" viewBox="0 0 152 100" aria-hidden="true">${fieldDisc({ cx: 124, cy: 24, r: 56, gap: '#12351F', dot: 6 })}</svg>`;
 const leaf = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19c3-5 6-8 10-10"/></svg>';
 
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -34,9 +33,10 @@ function view(d) {
   return `<div class="shell">${offlineBar()}${topbar()}
   <main class="home">
     <div class="hello"><h1>Bonjour, ${d.first}</h1><p class="date">${today()}</p></div>
-    <section class="parcel" aria-label="Parcelle active">${art}
+    <section class="parcel" aria-label="Parcelle active">
+      <div class="ptop"><div class="pleft"><p class="label">Parcelle active</p><h2>${p.name}</h2><p class="meta">${p.crop} · ${p.area}</p></div>
+        <button class="qrtile" data-act="qr" aria-label="Afficher le QR code de la parcelle ${p.name}"><span class="qrbox">${qrSvg(p.agroid)}</span><span>Mon QR code</span></button></div>
       <button class="chip" data-act="copy" data-code="${p.agroid}" aria-label="Copier l'AgroID ${p.agroid}">${p.agroid}${icon('copy')}</button>
-      <h2>${p.name}</h2><p class="meta">${p.crop} · ${p.area}</p>
       <div class="progress"><div class="row"><span>${d.campaign.label}</span><span>Jour ${s.day} sur ${s.total}</span></div>
         <div class="track" role="progressbar" aria-label="Avancement de la campagne" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.pct}"><i style="width:${s.pct}%"></i></div></div>
     </section>
@@ -46,7 +46,7 @@ function view(d) {
 }
 
 export function mountHome(root) {
-  css('/styles/shell.css'); css('/styles/home.css');
+  css('/styles/shell.css'); css('/styles/home.css'); css('/styles/qr.css');
   root.innerHTML = skeleton(); watchNetwork();
   let alive = true, data;
   api.home(ctx.user).then(d => {
@@ -58,6 +58,7 @@ export function mountHome(root) {
     if (!data) return true;
     if (el.dataset.act === 'copy') { navigator.clipboard.writeText(el.dataset.code).then(() => toast('AgroID copié.'), () => toast('Copie impossible sur cet appareil.')); return true; }
     if (el.dataset.act === 'diagnose') { go('capture'); return true; }
+    if (el.dataset.act === 'qr') { go('qr'); return true; }
     if (el.dataset.act === 'open') { go('result', { result: data.last, photo: null, back: 'home' }); return true; }
     return false;
   });
