@@ -2,6 +2,7 @@ import { api } from '../api/mock.js';
 import { go, ctx } from '../router.js';
 import { fieldDisc } from '../components/field.js';
 import { navbar, icon, toast, topbar, offlineBar, watchNetwork } from '../components/navbar.js';
+import { bindNav } from '../components/nav.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
 const art = `<svg class="art" viewBox="0 0 152 100" aria-hidden="true">${fieldDisc({ cx: 124, cy: 24, r: 56, gap: '#12351F', dot: 6 })}</svg>`;
@@ -53,14 +54,12 @@ export function mountHome(root) {
     data = d; ctx.parcel = d.parcel;
     root.innerHTML = view(d); watchNetwork();
   });
-  root.onclick = async e => {
-    const el = e.target.closest('[data-tab],[data-act]');
-    if (!el || !data) return;
-    if (el.dataset.act === 'copy') {
-      try { await navigator.clipboard.writeText(el.dataset.code); toast('AgroID copié.'); } catch (_) { toast('Copie impossible sur cet appareil.'); }
-    } else if (el.dataset.act === 'diagnose' || el.dataset.tab === 'diagnostic') go('capture');
-    else if (el.dataset.act === 'open') go('result', { result: data.last, photo: null });
-    else if (el.dataset.tab !== 'home') toast('Cet écran arrive bientôt.');
-  };
-  return () => { alive = false; root.onclick = null; };
+  const unbind = bindNav(root, 'home', el => {
+    if (!data) return true;
+    if (el.dataset.act === 'copy') { navigator.clipboard.writeText(el.dataset.code).then(() => toast('AgroID copié.'), () => toast('Copie impossible sur cet appareil.')); return true; }
+    if (el.dataset.act === 'diagnose') { go('capture'); return true; }
+    if (el.dataset.act === 'open') { go('result', { result: data.last, photo: null, back: 'home' }); return true; }
+    return false;
+  });
+  return () => { alive = false; unbind(); };
 }
