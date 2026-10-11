@@ -7,7 +7,7 @@ const CAT = { FUNGUS: ['fungus', 'C\'est un champignon.'], INSECT: ['insect', 'C
 const when = iso => new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 export function mountResult(root) {
-  const r = ctx.result, p = ctx.parcel || {}, img = ctx.photo || r.photo, queued = !r.problem;
+  const r = ctx.result, p = ctx.detailParcel || ctx.parcel || {}, img = ctx.photo || r.photo, queued = !r.problem;
   const st = r.status || 'ANOMALY';
   const sync = r.sync === 'SYNCED' ? `<span class="tag">${pic('check')}Envoyé</span>` : `<span class="tag wait">${pic('clock')}En attente d'envoi</span>`;
   const ref = String(r.id || '').replace(/-/g, '').slice(0, 6).toUpperCase();
@@ -38,13 +38,13 @@ export function mountResult(root) {
     ${queued ? '' : '<p class="mut">Validation par un agronome : en attente. Elle ne bloque pas votre conseil.</p>'}
     <p class="ref">Réf. ${ref}${r.source === 'GALLERY' ? ' · Photo de la galerie' : ''}</p></details>`;
   root.innerHTML = `<div class="res">
-    <div class="heroimg">${img ? `<img src="${img}" alt="Photo analysée">` : ''}<button class="pill-btn" id="back">← ${ctx.back === 'history' ? 'Historique' : 'Accueil'}</button>${sync}</div>
+    <div class="heroimg">${img ? `<img src="${img}" alt="Photo analysée">` : ''}<button class="pill-btn" id="back">← ${ctx.back === 'history' ? 'Historique' : ctx.back === 'parcel' ? 'Parcelle' : 'Accueil'}</button>${sync}</div>
     <section class="sheet">${verdict}${sure}${spoken ? faryPlayer() : ''}${seen}${details}
       ${queued ? '' : `<button class="link" id="redo2">Refaire une photo</button>`}
       <p class="note">Résultat de l'analyse PEST AI. À confirmer avec un agronome.</p></section>
     <footer class="actions single"><button class="btn main" id="main">${mainLabel}</button></footer></div>`;
   const $ = s => root.querySelector(s);
-  $('#back').onclick = () => go(ctx.back === 'history' ? 'history' : 'home');
+  $('#back').onclick = () => go(ctx.back === 'history' ? 'history' : ctx.back === 'parcel' ? 'parcel' : 'home');
   $('#main').onclick = () => go(mainId === 'redo' ? 'capture' : mainId);
   if ($('#redo2')) $('#redo2').onclick = () => go('capture');
   return spoken ? bindFary(root, spoken) : null;
