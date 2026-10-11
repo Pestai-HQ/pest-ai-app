@@ -9,10 +9,11 @@ import { mountAnalyse } from './screens/analyse.js';
 import { mountResult } from './screens/result.js';
 import { mountAdvice } from './screens/advice.js';
 import { mountHistory } from './screens/history.js';
+import { mountQr } from './screens/qrcode.js';
 
 const app = document.getElementById('app');
 const splash = document.getElementById('splash');
-['/styles/shell.css', '/styles/home.css', '/styles/diagnostic.css'].forEach(h => document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${h}">`));
+['/styles/shell.css', '/styles/home.css', '/styles/diagnostic.css', '/styles/qr.css'].forEach(h => document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${h}">`));
 
 setRoot(app);
 register('login', root => mountLogin(root, { onSuccess: user => go('home', { user }) }));
@@ -23,6 +24,7 @@ register('analyse', mountAnalyse);
 register('result', mountResult);
 register('advice', mountAdvice);
 register('history', mountHistory);
+register('qr', mountQr);
 go('login');
 
 // Retour du réseau : les analyses en attente se terminent (simulation tant que le back-end n'est pas branché).
