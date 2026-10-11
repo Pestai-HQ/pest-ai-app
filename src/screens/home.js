@@ -23,13 +23,17 @@ function skeleton() {
 }
 
 function view(d) {
-  const l = d.last, p = d.parcel, s = season(d.campaign), queued = !l.problem;
-  const badge = `<span class="badge" ${l.sync === 'SYNCED' ? '' : 'data-wait="true"'}>${icon(l.sync === 'SYNCED' ? 'check' : 'clock')}${l.sync === 'SYNCED' ? 'Envoyé' : 'En attente d\'envoi'}</span>`;
-  const thumb = `<div class="thumb">${l.photo ? `<img src="${l.photo}" alt="Photo du dernier diagnostic">` : leaf}</div>`;
-  const last = `<div class="head"><h3>Dernier diagnostic</h3>${badge}</div>
-    <div class="row">${thumb}<div><strong>${queued ? 'Analyse en attente' : l.problem}</strong><div class="sub">${relDate(l.captured_at)}</div></div></div>` +
-    (queued ? '' : `<div class="conf"><span class="bars" aria-hidden="true">${[1, 2, 3].map(i => `<i class="${i <= l.confidence ? 'f' : ''}"></i>`).join('')}</span>Confiance ${level(l.confidence)}</div>`) +
-    `<button class="more" data-act="open">Voir le résultat</button>`;
+  const l = d.last, p = d.parcel, s = season(d.campaign), queued = l && !l.problem;
+  let last;
+  if (!l) last = '<div class="head"><h3>Dernier diagnostic</h3></div><p class="empty-last">Aucun diagnostic pour cette parcelle. Photographiez une feuille touchée pour commencer.</p>';
+  else {
+    const badge = `<span class="badge" ${l.sync === 'SYNCED' ? '' : 'data-wait="true"'}>${icon(l.sync === 'SYNCED' ? 'check' : 'clock')}${l.sync === 'SYNCED' ? 'Envoyé' : 'En attente d\'envoi'}</span>`;
+    const thumb = `<div class="thumb">${l.photo ? `<img src="${l.photo}" alt="Photo du dernier diagnostic">` : leaf}</div>`;
+    last = `<div class="head"><h3>Dernier diagnostic</h3>${badge}</div>
+      <div class="row">${thumb}<div><strong>${queued ? 'Analyse en attente' : l.problem}</strong><div class="sub">${relDate(l.captured_at)}</div></div></div>` +
+      (queued ? '' : `<div class="conf"><span class="bars" aria-hidden="true">${[1, 2, 3].map(i => `<i class="${i <= l.confidence ? 'f' : ''}"></i>`).join('')}</span>Confiance ${level(l.confidence)}</div>`) +
+      `<button class="more" data-act="open">Voir le résultat</button>`;
+  }
   return `<div class="shell">${offlineBar()}${topbar()}
   <main class="home">
     <div class="hello"><h1>Bonjour, ${d.first}</h1><p class="date">${today()}</p></div>
@@ -49,7 +53,7 @@ export function mountHome(root) {
   css('/styles/shell.css'); css('/styles/home.css'); css('/styles/qr.css');
   root.innerHTML = skeleton(); watchNetwork();
   let alive = true, data;
-  api.home(ctx.user).then(d => {
+  api.home(ctx.user, ctx.parcel && ctx.parcel.id).then(d => {
     if (!alive) return;
     data = d; ctx.parcel = d.parcel;
     root.innerHTML = view(d); watchNetwork();
@@ -58,8 +62,8 @@ export function mountHome(root) {
     if (!data) return true;
     if (el.dataset.act === 'copy') { navigator.clipboard.writeText(el.dataset.code).then(() => toast('AgroID copié.'), () => toast('Copie impossible sur cet appareil.')); return true; }
     if (el.dataset.act === 'diagnose') { go('capture'); return true; }
-    if (el.dataset.act === 'qr') { go('qr'); return true; }
-    if (el.dataset.act === 'open') { go('result', { result: data.last, photo: null, back: 'home' }); return true; }
+    if (el.dataset.act === 'qr') { go('qr', { qrParcel: data.parcel, qrBack: 'home' }); return true; }
+    if (el.dataset.act === 'open') { go('result', { result: data.last, photo: null, back: 'home', detailParcel: null }); return true; }
     return false;
   });
   return () => { alive = false; unbind(); };
