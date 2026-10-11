@@ -6,11 +6,28 @@ const uuid = () => crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx
 const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (_) { return []; } };
 const write = h => { try { localStorage.setItem(KEY, JSON.stringify(h.slice(0, 20))); } catch (_) { /* stockage plein */ } };
 
-// Trois résultats possibles, en rotation, pour voir les trois niveaux de confiance pendant les essais.
+// Quatre résultats possibles, en rotation, pour voir tous les cas pendant les essais.
+// DÉMONSTRATION : le contenu réel (produits, conseils) viendra de PEST AI OS et sera validé par les agronomes (décision D-29).
+// Les doses ne sont jamais affichées : « lisez l'étiquette ».
 const VARIANTS = [
-  { problem: 'Mildiou de la tomate', confidence: 2, symptoms: ['Taches brunes sur les feuilles', 'Bords des feuilles qui sèchent'], steps: ['Retirez les feuilles très touchées.', 'Évitez d\'arroser sur les feuilles.', 'Espacez les rangs pour aérer les plants.'] },
-  { problem: 'Mildiou possible', confidence: 1, symptoms: ['Quelques taches sombres', 'Photo peu lisible'], steps: ['Refaites une photo plus nette.'] },
-  { problem: 'Mineuse de la tomate', confidence: 3, symptoms: ['Galeries blanches dans les feuilles', 'Petits trous sur les fruits'], steps: ['Retirez les feuilles minées.', 'Surveillez les plants voisins.'] }
+  { status: 'ANOMALY', category: 'FUNGUS', problem: 'Mildiou de la tomate', confidence: 2,
+    symptoms: ['Taches brunes sur les feuilles', 'Bords des feuilles qui sèchent'],
+    steps: [{ icon: 'scissors', text: 'Coupez les feuilles très touchées.' }, { icon: 'dropoff', text: 'Arrosez au pied, pas sur les feuilles.' }, { icon: 'spacing', text: 'Espacez les plants pour laisser passer l\'air.' }],
+    products: [{ icon: 'spray', name: 'Produit à base de cuivre', use: 'Contre les champignons, comme le mildiou.' }],
+    follow: { days: 3, text: 'Refaites une photo dans 3 jours.' } },
+  { status: 'HEALTHY', category: 'NONE', problem: 'Plante en bonne santé', confidence: 3,
+    symptoms: ['Feuilles vertes et fermes', 'Aucune tache visible'],
+    steps: [{ icon: 'drop', text: 'Arrosez le matin, au pied.' }, { icon: 'scissors', text: 'Retirez les feuilles mortes.' }, { icon: 'spacing', text: 'Gardez de l\'espace entre les plants.' }, { icon: 'eye', text: 'Regardez vos plants chaque semaine.' }],
+    products: [], follow: { days: 7, text: 'Refaites une photo dans 7 jours.' } },
+  { status: 'ANOMALY', category: 'INSECT', problem: 'Mineuse de la tomate', confidence: 3,
+    symptoms: ['Galeries blanches dans les feuilles', 'Petits trous sur les fruits'],
+    steps: [{ icon: 'scissors', text: 'Coupez les feuilles avec des galeries blanches.' }, { icon: 'eye', text: 'Regardez aussi les plants voisins.' }],
+    products: [{ icon: 'trap', name: 'Piège à papillons', use: 'Attrape les papillons adultes.' }, { icon: 'spray', name: 'Huile de neem', use: 'Contre les petites larves.' }],
+    follow: { days: 3, text: 'Refaites une photo dans 3 jours.' } },
+  { status: 'UNSURE', category: 'NONE', problem: 'Résultat incertain', confidence: 1,
+    symptoms: ['Photo peu lisible'],
+    steps: [{ icon: 'camera', text: 'Refaites la photo, plus près de la feuille.' }],
+    products: [], follow: null }
 ];
 const next = () => { const n = Number(localStorage.getItem(CNT) || 0); localStorage.setItem(CNT, n + 1); return VARIANTS[n % VARIANTS.length]; };
 
@@ -28,7 +45,7 @@ export const api = {
       first: user.first,
       parcel: { id: 'demo-parcel-1', name: 'Parcelle Niayes 1', crop: 'Tomate', agroid: 'AGR-SN-000123', area: '1,2 ha' },
       campaign: { label: 'Contre-saison 2026', start: daysFromNow(-40), end: daysFromNow(70) },
-      last: h[0] || { id: 'demo-diag-1', problem: 'Mildiou de la tomate', confidence: 2, captured_at: daysFromNow(-1), sync: 'SYNCED', symptoms: VARIANTS[0].symptoms, steps: VARIANTS[0].steps, photo: null }
+      last: h[0] || { id: 'demo-diag-1', ...VARIANTS[0], captured_at: daysFromNow(-1), sync: 'SYNCED', photo: null }
     };
   },
   // Une demande = une parcelle + une seule photo. L'id est créé sur le téléphone (renvoi sans doublon après coupure).
