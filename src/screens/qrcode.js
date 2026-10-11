@@ -4,9 +4,9 @@ import { ic } from '../components/icons.js';
 import { qrSvg, qrPng } from '../components/qr.js';
 
 export function mountQr(root) {
-  const p = ctx.parcel;
+  const p = ctx.qrParcel || ctx.parcel, fromParcel = ctx.qrBack === 'parcel';
   root.innerHTML = `<div class="qrs">
-    <header class="bar"><button class="ghost dark" id="back">← Accueil</button></header>
+    <header class="bar"><button class="ghost dark" id="back">← ${fromParcel ? 'Parcelle' : 'Accueil'}</button></header>
     <main class="qr-main">
       <div><p class="kicker">Ma parcelle</p><h1>Mon QR code</h1><p class="lead">Montrez ce code à votre agent. Il ouvre votre parcelle.</p></div>
       <div class="qr-card"><div class="qr-big">${qrSvg(p.agroid, 'QR code de la parcelle ' + p.name)}</div><p class="qr-name">${p.name}</p><p class="qr-id">${p.agroid}</p></div>
@@ -14,7 +14,7 @@ export function mountQr(root) {
       <div class="qr-actions"><button class="btn out" id="copy">Copier l'AgroID</button><button class="btn out" id="save">Enregistrer l'image</button></div>
     </main></div>`;
   const $ = s => root.querySelector(s);
-  $('#back').onclick = () => go('home');
+  $('#back').onclick = () => go(fromParcel ? 'parcel' : 'home');
   $('#copy').onclick = () => navigator.clipboard.writeText(p.agroid).then(() => toast('AgroID copié.'), () => toast('Copie impossible sur cet appareil.'));
   $('#save').onclick = () => {
     const a = document.createElement('a'); a.href = qrPng(p.agroid, p.name); a.download = `AgroID-${p.agroid}.png`;
