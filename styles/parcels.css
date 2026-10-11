@@ -63,3 +63,68 @@ button.ev:active{background:var(--tint)}
 .evb span{color:var(--mut);font-size:.88rem}
 .ev .vp{flex:none}
 .cbody{display:flex;flex-direction:column;gap:1rem}
+
+/* ---- Fiche « passeport numérique » ---- */
+.ptitle .kicker{margin:0 0 .15rem}
+.ptitle h1{margin:0;font-size:1.75rem;line-height:1.1;font-weight:700;letter-spacing:-.015em;color:var(--forest);text-wrap:balance}
+.idcard{position:relative;overflow:hidden;background:#fff;border:1.5px solid #BFE3CC;border-radius:26px;padding:1.4rem 1.1rem .5rem;box-shadow:var(--shadow)}
+.idcard::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--green),var(--yellow))}
+.idtop{display:flex;justify-content:space-between;align-items:center;gap:.8rem}
+.idl{display:flex;gap:.75rem;align-items:center;min-width:0}
+.idmark{flex:none;display:grid;place-items:center;width:3.3rem;height:3.3rem;border-radius:16px;background:var(--tint)}
+.idmark img{width:2.3rem;height:2.3rem;display:block;mix-blend-mode:multiply}
+.idlab{margin:0;font-size:.78rem;font-weight:700;letter-spacing:.07em;color:var(--action)}
+.idcode{margin:.05rem 0 .3rem;white-space:nowrap;font-size:1.2rem;font-weight:700;letter-spacing:.03em;font-variant-numeric:tabular-nums;color:var(--forest)}
+.okb{white-space:nowrap;display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:700;color:var(--action)}
+.okb svg{width:1rem;height:1rem}
+.idscan{position:relative;flex:none;width:5.8rem;height:5.8rem;padding:.55rem;border:0;background:none;cursor:pointer}
+.idscan i{position:absolute;width:1.15rem;height:1.15rem;border:3px solid var(--green)}
+.idscan i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0;border-radius:8px 0 0 0}
+.idscan i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0;border-radius:0 8px 0 0}
+.idscan i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0;border-radius:0 0 0 8px}
+.idscan i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0;border-radius:0 0 8px 0}
+.qrinner{display:block;width:100%;height:100%}
+.qrinner svg{display:block;width:100%;height:100%}
+.idfoot{display:flex;justify-content:space-between;gap:.5rem;margin-top:.4rem;border-top:1px solid var(--line)}
+.idfoot .link{white-space:nowrap;display:inline-flex;align-items:center;gap:.4rem;min-height:3rem;border:0;background:none;color:var(--action);font:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
+.idfoot .link svg{width:1.1rem;height:1.1rem}
+.card2{background:#fff;border:1px solid var(--line);border-radius:22px;padding:1.1rem;box-shadow:var(--shadow)}
+.fiche .ks,.kpi .ks{margin:0 0 .8rem;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--action);text-transform:uppercase}
+.ov{display:grid;grid-template-columns:1fr 1fr;gap:.95rem .7rem;margin:0}
+.ov>div{display:flex;gap:.6rem;align-items:center;min-width:0}
+.ovi{flex:none;display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--tint);color:var(--action)}
+.ovi svg{width:1.3rem;height:1.3rem}
+.ov dt{font-size:.78rem;color:var(--mut)}
+.ov dd{margin:0;font-weight:700;font-size:.98rem;line-height:1.2}
+.tlh{display:flex;overflow-x:auto;margin:0 -.5rem;padding:0 .5rem .2rem;scrollbar-width:none}
+.tlh::-webkit-scrollbar{display:none}
+.tn{flex:1 0 3.8rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;min-height:3.6rem;padding:0;border:0;background:none;color:var(--mut);font:inherit;cursor:default}
+button.tn{cursor:pointer}
+.tn b{font-size:.88rem;font-weight:600}
+.tn small{font-size:.76rem;font-weight:600;text-align:center;line-height:1.15}
+.dotrow{position:relative;display:flex;justify-content:center;align-items:center;width:100%;height:1.1rem}
+.dotrow::before,.dotrow::after{content:"";position:absolute;top:50%;height:2px;margin-top:-1px;background:var(--line)}
+.dotrow::before{left:0;right:50%}.dotrow::after{left:50%;right:0}
+.tn:first-child .dotrow::before,.tn:last-child .dotrow::after{display:none}
+.dot{position:relative;z-index:1;width:.85rem;height:.85rem;border-radius:50%;background:#fff;border:2px solid #A9BBB0}
+.tn[aria-selected="true"]{color:var(--forest)}
+.tn[aria-selected="true"] b,.tn[aria-selected="true"] small{font-weight:800}
+.tn[aria-selected="true"] .dot{border-color:var(--green);background:var(--green);box-shadow:0 0 0 4px rgba(16,164,82,.2)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:22px;padding:1rem;box-shadow:var(--shadow)}
+.kpi.wide{grid-column:1/-1}
+.ky{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.ylab{display:block;font-size:.88rem;color:var(--mut)}
+.ky strong{font-size:2rem;line-height:1.1;color:var(--forest)}
+.ky small{font-size:1rem;font-weight:600}
+.ky svg{flex:none;width:8.5rem;height:3.4rem}
+.donutbox svg{display:block;width:6.4rem;height:6.4rem;margin:0 auto}
+.gaugebox svg{display:block;width:8rem;height:auto;margin:.3rem auto 0}
+.gword{margin:.1rem 0 0;text-align:center;font-weight:700;font-size:.98rem}
+.gnum{margin:.15rem 0 0;text-align:center;color:var(--mut);font-size:.85rem;text-wrap:balance}
+.trust{display:flex;gap:.8rem;align-items:center;padding:.9rem 1rem;border-radius:18px;background:var(--tint);border:1px solid #BFE3CC}
+.trust svg{flex:none;width:2.3rem;height:2.3rem;color:var(--action)}
+.trust strong{display:block;font-size:1rem;color:var(--forest)}
+.trust span{font-size:.9rem;color:var(--mut)}
+
+nav.tabs{z-index:5}
