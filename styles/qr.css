@@ -1,0 +1,26 @@
+/* QR code de la parcelle : tuile sur l'Accueil et écran plein format. */
+.parcel .ptop{display:flex;gap:1rem;align-items:flex-start;justify-content:space-between}
+.parcel .pleft{flex:1;min-width:0}
+.parcel .pleft .label{margin:0}
+.parcel .pleft h2{margin:.5rem 0 .15rem;font-size:1.5rem}
+.parcel .chip{margin-top:.9rem}
+.qrtile{flex:none;display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:0;border:0;background:none;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer}
+.qrbox{display:block;width:5.6rem;height:5.6rem;padding:.3rem;border-radius:16px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.qrbox svg{display:block;width:100%;height:100%}
+.qrtile:active .qrbox{transform:scale(.97)}
+
+.qrs{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.qr-main{flex:1;padding:.25rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.qr-main h1{margin:0;font-size:1.9rem;line-height:1.1;font-weight:700;letter-spacing:-.015em;color:var(--forest)}
+.qr-main .kicker{margin:0 0 .25rem}
+.lead{margin:.4rem 0 0;font-size:1.1rem;color:var(--ink)}
+.qr-card{display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:1.25rem 1rem 1.1rem;border-radius:28px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+.qr-big{width:min(64vw,15rem);aspect-ratio:1}
+.qr-big svg{display:block;width:100%;height:100%}
+.qr-name{margin:.5rem 0 0;color:var(--mut);font-size:1rem}
+.qr-id{margin:0;font-size:1.5rem;font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--forest)}
+.qr-tip{display:flex;gap:.7rem;align-items:flex-start;padding:.8rem 1rem;border-radius:16px;background:#FFF1BF}
+.qr-tip svg{flex:none;width:1.5rem;height:1.5rem}
+.qr-tip p{margin:0;font-size:1rem}
+.qr-actions{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.qr-actions .btn{min-height:3.25rem;font-size:1rem;padding:0 .5rem}
