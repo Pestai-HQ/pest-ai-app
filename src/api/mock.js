@@ -43,16 +43,18 @@ const seed = () => [
 // CropYield (récolte), Observation, Treatment. Le schéma n'a pas de champ « nom » de parcelle : le nom affiché ici est provisoire.
 const day = n => daysFromNow(n);
 const PARCELS = [
-  { id: 'demo-parcel-1', name: 'Parcelle Niayes 1', location: 'Niayes, Thiès', agroid: 'SN-TH-00194', area_ha: 1.2, declared_area_ha: 1.2, status: 'ACTIVE' },
-  { id: 'demo-parcel-2', name: 'Parcelle Niayes 2', location: 'Niayes, Thiès', agroid: 'SN-TH-00195', area_ha: 0.8, declared_area_ha: 0.9, status: 'ACTIVE' }
+  { id: 'demo-parcel-1', name: 'Parcelle Niayes 1', location: 'Niayes, Thiès', agroid: 'SN-TH-00194', area_ha: 1.2, declared_area_ha: 1.2, status: 'ACTIVE', issued_at: day(-870) },
+  { id: 'demo-parcel-2', name: 'Parcelle Niayes 2', location: 'Niayes, Thiès', agroid: 'SN-TH-00195', area_ha: 0.8, declared_area_ha: 0.9, status: 'ACTIVE', issued_at: day(-300) }
 ];
 const CAMPAIGNS = {
   'demo-parcel-1': [
     { id: 'c1-2026', season: 'Contre-saison 2026', crop: 'Tomate', variety: 'Mongal', status: 'OPEN', planned_start: day(-40), planned_end: day(70), opened_at: day(-40) },
-    { id: 'c1-2025', season: 'Contre-saison 2025', crop: 'Oignon', variety: '', status: 'CLOSED', planned_start: day(-410), planned_end: day(-300), opened_at: day(-408), closed_at: day(-296),
-      yield: { qty: '26', unit: 't', date: day(-300) }, summary: 'Récolte conforme aux attentes. Peu de maladies pendant la campagne.' },
-    { id: 'c1-2024', season: 'Hivernage 2024', crop: 'Maïs', variety: '', status: 'CLOSED', planned_start: day(-790), planned_end: day(-690), opened_at: day(-788), closed_at: day(-686),
-      yield: { qty: '3,4', unit: 't', date: day(-690) }, summary: 'Pluies en retard au début, récolte correcte.' }
+    { id: 'c1-2025c', season: 'Contre-saison 2025', crop: 'Oignon', variety: '', status: 'CLOSED', planned_start: day(-340), planned_end: day(-240), opened_at: day(-338), closed_at: day(-236),
+      yield: { qty: 26, unit: 't', date: day(-240) }, summary: 'Récolte conforme aux attentes. Peu de maladies pendant la campagne.' },
+    { id: 'c1-2025h', season: 'Hivernage 2025', crop: 'Maïs', variety: '', status: 'CLOSED', planned_start: day(-470), planned_end: day(-370), opened_at: day(-468), closed_at: day(-366),
+      yield: { qty: 3.4, unit: 't', date: day(-370) }, summary: 'Bonnes pluies. Rendement en hausse sur la campagne précédente.' },
+    { id: 'c1-2024', season: 'Hivernage 2024', crop: 'Maïs', variety: '', status: 'CLOSED', planned_start: day(-830), planned_end: day(-730), opened_at: day(-828), closed_at: day(-726),
+      yield: { qty: 3.0, unit: 't', date: day(-730) }, summary: 'Pluies en retard au début, récolte correcte.' }
   ],
   'demo-parcel-2': [
     { id: 'c2-2026', season: 'Contre-saison 2026', crop: 'Oignon', variety: '', status: 'OPEN', planned_start: day(-25), planned_end: day(95), opened_at: day(-25) }
@@ -64,13 +66,16 @@ const PAST = {
     { type: 'OBSERVATION', at: day(-12), title: 'Feuilles jaunies au bord nord', sub: 'Observation' },
     { type: 'TREATMENT', at: day(-20), title: 'Désherbage manuel', sub: 'Pratique agronomique' }
   ],
-  'c1-2025': [
-    { type: 'DIAGNOSIS', at: day(-340), title: 'Plante en bonne santé', sub: 'Diagnostic', status: 'HEALTHY' },
-    { type: 'OBSERVATION', at: day(-330), title: 'Bonne levée des plants', sub: 'Observation' },
-    { type: 'TREATMENT', at: day(-350), title: 'Irrigation goutte à goutte', sub: 'Pratique agronomique' }
+  'c1-2025c': [
+    { type: 'DIAGNOSIS', at: day(-300), title: 'Plante en bonne santé', sub: 'Diagnostic', status: 'HEALTHY' },
+    { type: 'OBSERVATION', at: day(-290), title: 'Bonne levée des plants', sub: 'Observation' },
+    { type: 'TREATMENT', at: day(-310), title: 'Irrigation goutte à goutte', sub: 'Pratique agronomique' }
+  ],
+  'c1-2025h': [
+    { type: 'OBSERVATION', at: day(-440), title: 'Semis après les premières pluies', sub: 'Observation' }
   ],
   'c1-2024': [
-    { type: 'OBSERVATION', at: day(-740), title: 'Semis après les premières pluies', sub: 'Observation' }
+    { type: 'OBSERVATION', at: day(-800), title: 'Semis tardif, pluies en retard', sub: 'Observation' }
   ],
   'c2-2026': [
     { type: 'OBSERVATION', at: day(-15), title: 'Plants réguliers, bonne reprise', sub: 'Observation' }
