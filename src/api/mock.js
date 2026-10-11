@@ -43,8 +43,8 @@ const seed = () => [
 // CropYield (récolte), Observation, Treatment. Le schéma n'a pas de champ « nom » de parcelle : le nom affiché ici est provisoire.
 const day = n => daysFromNow(n);
 const PARCELS = [
-  { id: 'demo-parcel-1', name: 'Parcelle Niayes 1', location: 'Niayes, Thiès', agroid: 'SN-TH-00194', area_ha: 1.2, declared_area_ha: 1.2, status: 'ACTIVE', issued_at: day(-870) },
-  { id: 'demo-parcel-2', name: 'Parcelle Niayes 2', location: 'Niayes, Thiès', agroid: 'SN-TH-00195', area_ha: 0.8, declared_area_ha: 0.9, status: 'ACTIVE', issued_at: day(-300) }
+  { id: 'demo-parcel-1', name: 'Parcelle Niayes 1', location: 'Niayes, Thiès', agroid: 'SN-TH-00194', lat: 14.85, lon: -16.95, area_ha: 1.2, declared_area_ha: 1.2, status: 'ACTIVE', issued_at: day(-870) },
+  { id: 'demo-parcel-2', name: 'Parcelle Niayes 2', location: 'Niayes, Thiès', agroid: 'SN-TH-00195', lat: 14.86, lon: -16.96, area_ha: 0.8, declared_area_ha: 0.9, status: 'ACTIVE', issued_at: day(-300) }
 ];
 const CAMPAIGNS = {
   'demo-parcel-1': [
