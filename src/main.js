@@ -12,6 +12,7 @@ import { mountHistory } from './screens/history.js';
 import { mountQr } from './screens/qrcode.js';
 import { mountParcels } from './screens/parcels.js';
 import { mountParcel } from './screens/parcel.js';
+import { mountWeather } from './screens/weather.js';
 
 const app = document.getElementById('app');
 const splash = document.getElementById('splash');
@@ -29,6 +30,7 @@ register('history', mountHistory);
 register('qr', mountQr);
 register('parcels', mountParcels);
 register('parcel', mountParcel);
+register('weather', mountWeather);
 go('login');
 
 // Retour du réseau : les analyses en attente se terminent (simulation tant que le back-end n'est pas branché).
