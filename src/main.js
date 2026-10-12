@@ -1,7 +1,6 @@
 import { setRoot, register, go } from './router.js';
 import { api } from './api/mock.js';
 import { toast } from './components/navbar.js';
-import { mountWelcome } from './screens/welcome.js';
 import { mountOnboarding } from './screens/onboarding.js';
 import { mountLogin } from './screens/login.js';
 import { mountHome } from './screens/home.js';
@@ -21,7 +20,7 @@ const splash = document.getElementById('splash');
 ['/styles/shell.css', '/styles/home.css', '/styles/diagnostic.css', '/styles/qr.css', '/styles/auth.css'].forEach(h => document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${h}">`));
 
 setRoot(app);
-register('welcome', mountWelcome);
+register('welcome', mountOnboarding);
 register('onboarding', mountOnboarding);
 register('login', root => mountLogin(root, { onSuccess: user => go('home', { user }) }));
 register('home', mountHome);
