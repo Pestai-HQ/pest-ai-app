@@ -6,8 +6,8 @@
   --font:'Outfit','Century Gothic','Avenir Next','Trebuchet MS',sans-serif;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1.0625rem;line-height:1.45;font-weight:400;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;font-size:93.75%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1rem;line-height:1.45;font-weight:400;-webkit-tap-highlight-color:transparent}
 button,input{font:inherit}
 #app{max-width:30rem;margin:0 auto;min-height:100vh;min-height:100dvh}
 :focus-visible{outline:3px solid var(--ink);outline-offset:3px}
