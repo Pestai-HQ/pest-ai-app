@@ -5,7 +5,8 @@ import { navbar, icon, toast, topbar, offlineBar, watchNetwork } from '../compon
 import { bindNav } from '../components/nav.js';
 import { pic } from '../components/pictos.js';
 import { getWeather } from '../api/weather.js';
-import { weatherView, weatherPlaceholder } from '../components/weather.js';
+import { weatherBar } from '../components/weather.js';
+import { lastPosition } from '../api/geo.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
 const leaf = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19c3-5 6-8 10-10"/></svg>';
@@ -40,7 +41,7 @@ function view(d) {
   return `<div class="shell">${offlineBar()}${topbar()}
   <main class="home">
     <div class="hello"><h1>Bonjour, ${d.first}</h1><p class="date">${today()}</p></div>
-    <section class="wx" id="wx" aria-label="Météo de la parcelle">${weatherPlaceholder()}</section>
+    <button class="wxbar" id="wx" data-act="weather" aria-label="Voir la météo détaillée">${weatherBar(null)}</button>
     <section class="parcel" aria-label="Parcelle active">
       <div class="ptop"><div class="pleft"><p class="label">Parcelle active</p><h2>${p.name}</h2><p class="meta">${p.crop} · ${p.area}</p></div>
         <button class="qrtile" data-act="qr" aria-label="Afficher le QR code de la parcelle ${p.name}"><span class="qrbox">${qrSvg(p.agroid)}</span><span>Mon QR code</span></button></div>
@@ -70,12 +71,14 @@ export function mountHome(root) {
     if (!alive) return;
     data = d; ctx.parcel = d.parcel;
     root.innerHTML = view(d); watchNetwork();
-    getWeather(d.parcel.lat, d.parcel.lon).then(w => { const el = alive && root.querySelector('#wx'); if (el) el.innerHTML = weatherView(w, d.parcel.location || ''); });
+    const at = lastPosition() || { lat: d.parcel.lat, lon: d.parcel.lon };
+    getWeather(at.lat, at.lon).then(w => { const el = alive && root.querySelector('#wx'); if (el && w) el.innerHTML = weatherBar(w); });
   });
   const unbind = bindNav(root, 'home', el => {
     if (!data) return true;
     if (el.dataset.act === 'copy') { navigator.clipboard.writeText(el.dataset.code).then(() => toast('AgroID copié.'), () => toast('Copie impossible sur cet appareil.')); return true; }
     if (el.dataset.act === 'diagnose') { go('capture'); return true; }
+    if (el.dataset.act === 'weather') { go('weather'); return true; }
     if (el.dataset.act === 'qr') { go('qr', { qrParcel: data.parcel, qrBack: 'home' }); return true; }
     if (el.dataset.act === 'open') { go('result', { result: data.last, photo: null, back: 'home', detailParcel: null }); return true; }
     return false;
