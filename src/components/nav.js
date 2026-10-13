@@ -1,7 +1,7 @@
 // Navigation commune : les onglets de la barre du bas. Les écrans non encore construits affichent un message bref.
 import { go } from '../router.js';
 import { toast } from './navbar.js';
-const TARGET = { home: 'home', parcels: 'parcels', diagnostic: 'capture', history: 'history' };
+const TARGET = { home: 'home', parcels: 'parcels', diagnostic: 'capture', history: 'history', profile: 'profile' };
 export function bindNav(root, current, extra) {
   root.onclick = e => {
     const el = e.target.closest('[data-tab],[data-act]');
