@@ -4,6 +4,8 @@ const daysFromNow = n => new Date(Date.now() + n * 864e5).toISOString();
 const KEY = 'pestai.history.v2', CNT = 'pestai.count.v2';
 const uuid = () => crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
 const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (_) { return []; } };
+const stamp = () => { try { localStorage.setItem('pestai.lastsync', String(Date.now())); } catch (_) { /* ignoré */ } };
+export const lastSync = () => Number(localStorage.getItem('pestai.lastsync')) || 0;
 const write = h => { try { localStorage.setItem(KEY, JSON.stringify(h.slice(0, 20))); } catch (_) { /* stockage plein */ } };
 
 // Quatre résultats possibles, en rotation, pour voir tous les cas pendant les essais.
@@ -88,7 +90,7 @@ export const api = {
   async login(phone, code) {
     await wait(1100);
     if (code === '0000') throw new Error('invalid_credentials');
-    return { id: 'demo-producer', first: 'Moussa', role: 'PRODUCER' };
+    return { id: 'demo-producer', first: 'Moussa', role: 'PRODUCER', org: 'Coopérative des Niayes' };
   },
   async home(user, activeId) {
     await wait(650);
@@ -132,14 +134,14 @@ export const api = {
     await wait(online ? 3600 : 1200);
     const base = { id: uuid(), parcel_id: parcel.id, captured_at: new Date().toISOString(), photo, source };
     const item = online ? { ...base, ...next(), sync: 'SYNCED' } : { ...base, problem: null, confidence: 0, symptoms: [], steps: [], sync: 'PENDING' };
-    write([item, ...read()]);
+    write([item, ...read()]); if (online) stamp();
     return item;
   },
   // Retour du réseau : les analyses différées se terminent (simulation).
   async syncPending() {
     const h = read(); let n = 0;
     h.forEach(i => { if (i.sync === 'PENDING') { Object.assign(i, next(), { sync: 'SYNCED' }); n++; } });
-    if (n) write(h);
+    if (n) { write(h); stamp(); }
     return n;
   }
 };
