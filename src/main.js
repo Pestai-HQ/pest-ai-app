@@ -14,11 +14,14 @@ import { mountQr } from './screens/qrcode.js';
 import { mountParcels } from './screens/parcels.js';
 import { mountParcel } from './screens/parcel.js';
 import { mountWeather } from './screens/weather.js';
+import { mountProfile, mountLang, mountSettings, mountHelp, mountSync } from './screens/profile.js';
+import { applyFontSize } from './components/prefs.js';
 
 const app = document.getElementById('app');
 const splash = document.getElementById('splash');
 ['/styles/shell.css', '/styles/home.css', '/styles/diagnostic.css', '/styles/qr.css', '/styles/auth.css'].forEach(h => document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${h}">`));
 
+applyFontSize();
 setRoot(app);
 register('welcome', mountOnboarding);
 register('onboarding', mountOnboarding);
@@ -34,6 +37,11 @@ register('qr', mountQr);
 register('parcels', mountParcels);
 register('parcel', mountParcel);
 register('weather', mountWeather);
+register('profile', mountProfile);
+register('lang', mountLang);
+register('settings', mountSettings);
+register('help', mountHelp);
+register('sync', mountSync);
 // Première ouverture : lancement et présentation. Ensuite : connexion directe. « ?onboarding » rejoue la présentation.
 let seen = false; try { seen = !!localStorage.getItem('pestai.onboarded'); } catch (_) { /* ignoré */ }
 go(seen && !/[?&]onboarding/.test(location.search) ? 'login' : 'welcome');
