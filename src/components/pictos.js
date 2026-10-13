@@ -41,6 +41,8 @@ const P = {
   textsize: '<path d="M3 18L8 6l5 12M5 14h6M15 18l2.5-6 2.5 6M16 16h3"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/>',
   replay: '<path d="M4 12a8 8 0 108-8H8"/><path d="M11 1L8 4l3 3"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/>',
+  parcels: '<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="4"/>',
   check: '<path d="M5 12.5l4.5 4.5L19 7"/>',
