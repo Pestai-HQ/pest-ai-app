@@ -70,6 +70,7 @@ export function mountAdvice(root) {
       if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     }
   });
+  if (localStorage.getItem('pestai.rate') === '0.8') { voice.setRate(0.8); $('#r2').setAttribute('aria-pressed', 'true'); $('#r1').setAttribute('aria-pressed', 'false'); }
   $('#play').onclick = () => (voice.state === 'playing' ? voice.pause() : voice.play());
   $('#replay').onclick = () => { setBar(0); voice.replay(); };
   const rate = (v, on, off) => { voice.setRate(v); $(on).setAttribute('aria-pressed', 'true'); $(off).setAttribute('aria-pressed', 'false'); };
