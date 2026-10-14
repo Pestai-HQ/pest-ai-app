@@ -9,6 +9,7 @@ import { WMO, spray } from '../components/weather.js';
 import { lastPosition } from '../api/geo.js';
 import { verdict } from '../components/verdict.js';
 import { waLink } from '../components/contact.js';
+import { canInstall, dismissed, dismiss, install, installCard } from '../components/install.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
 const chev = `<span class="chv" aria-hidden="true">${pic('chevron')}</span>`;
@@ -62,6 +63,7 @@ function view(d) {
   return `<div class="shell">${offlineBar()}${brandTop()}
   <main class="home h3">
     <div class="greet"><h1><span class="gi">${pic('sprout')}</span>Bonjour, ${d.first}</h1>${richPill()}</div>
+    <div id="ibox"></div>
 
     <section class="pc" aria-label="Parcelle active">
       <div class="pc-main">
@@ -96,13 +98,13 @@ function view(d) {
 }
 
 export function mountHome(root) {
-  ['shell', 'home', 'qr', 'home2', 'home3'].forEach(n => css(`/styles/${n}.css`));
+  ['shell', 'home', 'qr', 'home2', 'home3', 'install'].forEach(n => css(`/styles/${n}.css`));
   root.innerHTML = skeleton(); watchNetwork();
   let alive = true, data;
   api.home(ctx.user, ctx.parcel && ctx.parcel.id).then(d => {
     if (!alive) return;
     data = d; ctx.parcel = d.parcel;
-    root.innerHTML = view(d); watchNetwork();
+    root.innerHTML = view(d); watchNetwork(); drawInstall();
     const at = lastPosition() || { lat: d.parcel.lat, lon: d.parcel.lon };
     getWeather(at.lat, at.lon).then(w => {
       const el = alive && root.querySelector('#wx'); if (!el || !w) return;
@@ -110,9 +112,13 @@ export function mountHome(root) {
       el.innerHTML = `${pic(ic)}<span><b>${now.temp}° · ${label}</b><small class="sp ${sp.cls}">Pulvérisation : ${sp.word}</small></span>${chev}`;
     });
   });
+  const drawInstall = () => { const box = root.querySelector('#ibox'); if (box) box.innerHTML = canInstall() && !dismissed() ? installCard() : ''; };
+  addEventListener('pwa:state', drawInstall);
   const unbind = bindNav(root, 'home', el => {
     if (!data) return true;
     const a = el.dataset.act, l = data.last;
+    if (a === 'install') { install(); return true; }
+    if (a === 'later') { dismiss(); return true; }
     if (a === 'copy') { navigator.clipboard.writeText(data.parcel.agroid).then(() => toast('AgroID copié.'), () => toast('Copie impossible sur cet appareil.')); return true; }
     if (a === 'diagnose') { go('capture'); return true; }
     if (a === 'qr') { go('qr', { qrParcel: data.parcel, qrBack: 'home' }); return true; }
@@ -130,5 +136,5 @@ export function mountHome(root) {
     }
     return false;
   });
-  return () => { alive = false; unbind(); if ('speechSynthesis' in window) speechSynthesis.cancel(); };
+  return () => { alive = false; unbind(); removeEventListener('pwa:state', drawInstall); if ('speechSynthesis' in window) speechSynthesis.cancel(); };
 }
