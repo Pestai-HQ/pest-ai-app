@@ -5,6 +5,7 @@ import { navbar, topbar, offlineBar, watchNetwork, toast } from '../components/n
 import { bindNav } from '../components/nav.js';
 import { waLink } from '../components/contact.js';
 import { getPref, setPref, applyFontSize } from '../components/prefs.js';
+import { canInstall, install } from '../components/install.js';
 
 const css = href => { if (!document.querySelector(`link[href="${href}"]`)) document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${href}">`); };
 const styles = () => ['shell', 'home', 'history', 'profile'].forEach(n => css(`/styles/${n}.css`));
@@ -37,7 +38,7 @@ export function mountProfile(root) {
       <section class="pf-id"><span class="pf-av" aria-hidden="true">${u.first.charAt(0)}</span><div><strong>${u.first}</strong><span>Producteur${u.org ? ' · ' + u.org : ''}</span></div></section>
       <button class="pf-sync" data-act="sync"><span class="ri">${pic('refresh')}</span><span class="rt"><b>Synchronisation</b><small>${ls ? 'Dernière : ' + when(ls) : 'Rien à envoyer'}</small></span>
         <span class="pf-st ${pending ? 'wait' : 'ok'}">${pending ? `En attente (${pending})` : 'À jour'}</span>${chev}</button>
-      <div class="pf-list">${row('lang', 'globe', 'Langue', 'Français')}${row('settings', 'sliders', 'Paramètres', 'Audio, taille du texte')}${row('help', 'help', 'Aide', 'Photo, réseau, audio')}${row('replay', 'replay', 'Revoir la présentation', '')}</div>
+      <div class="pf-list">${row('lang', 'globe', 'Langue', 'Français')}${row('settings', 'sliders', 'Paramètres', 'Audio, taille du texte')}${row('help', 'help', 'Aide', 'Photo, réseau, audio')}${row('replay', 'replay', 'Revoir la présentation', '')}${canInstall() ? row('install', 'phone', 'Installer l\'application', 'Plein écran sur votre téléphone') : ''}</div>
       <button class="pf-out" data-act="logout">${pic('logout')}Se déconnecter</button>
       <p class="pf-ver">PEST AI · version 0.1 (démonstration)</p></main>${navbar('profile')}</div>`;
     watchNetwork();
@@ -46,6 +47,7 @@ export function mountProfile(root) {
     const a = el.dataset.act;
     if (a === 'lang') go('lang'); else if (a === 'settings') go('settings'); else if (a === 'help') go('help'); else if (a === 'sync') go('sync');
     else if (a === 'replay') go('welcome');
+    else if (a === 'install') install();
     else if (a === 'logout') confirmLogout();
     else if (a === 'cancel') root.querySelector('.pf-bg')?.remove();
     else if (a === 'confirm') { ctx.user = null; ctx.parcel = null; go('login'); }
@@ -89,6 +91,7 @@ const HELP = [
   ['camera', 'Comment prendre une bonne photo ?', 'Photographiez une seule feuille touchée, de près, en pleine lumière. Tenez bien le téléphone. Évitez l\'ombre et le flou.'],
   ['cloud', 'Que veut dire « hors connexion » ?', 'Votre téléphone n\'a pas de réseau. L\'application marche quand même : vos photos restent sur le téléphone.'],
   ['clock', 'Que veut dire « en attente d\'envoi » ?', 'Vos données sont gardées sur le téléphone. Elles partiront toutes seules dès que le réseau revient.'],
+  ['phone', 'Comment installer l\'application ?', 'Ouvrez le menu de votre navigateur, puis touchez « Installer l\'application » ou « Ajouter à l\'écran d\'accueil ». L\'icône PEST AI apparaît sur votre écran.'],
   ['sound', 'Comment écouter le conseil ?', 'Ouvrez un résultat, puis touchez « Voir quoi faire ». Touchez le grand bouton jaune : Fary lit le conseil.']
 ];
 export function mountHelp(root) {
