@@ -1,0 +1,18 @@
+/* Installation de l'application */
+.ib{display:grid;grid-template-columns:auto 1fr;gap:.65rem .8rem;align-items:center;padding:.9rem;border:1px solid #BFE3CC;border-radius:20px;background:var(--tint)}
+.ib-ic{display:grid;place-items:center;width:2.8rem;height:2.8rem;border-radius:14px;background:var(--forest);color:#fff}
+.ib-ic svg{width:1.4rem;height:1.4rem}
+.ib strong{font-size:1rem;color:var(--forest)}
+.ib p{margin:.1rem 0 0;font-size:.85rem;color:var(--mut)}
+.ib-act{grid-column:1/-1;display:flex;gap:.6rem}
+.ib-go{flex:1;min-height:2.9rem;border:0;border-radius:99px;background:var(--forest);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.ib-later{min-height:2.9rem;padding:0 1rem;border:0;background:none;color:var(--mut);font:inherit;font-weight:600;cursor:pointer}
+.ins-bg{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;background:rgba(11,25,41,.55)}
+.ins-sheet{width:100%;max-width:30rem;padding:1.4rem 1.5rem calc(1.4rem + env(safe-area-inset-bottom,0px));border-radius:28px 28px 0 0;background:#fff;display:flex;flex-direction:column;gap:.8rem}
+.ins-sheet h2{margin:0;font-size:1.3rem;color:var(--forest)}
+.ins-sheet>p{margin:0;color:var(--mut)}
+.ins-sheet ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.ins-sheet li{display:flex;gap:.75rem;align-items:flex-start}
+.ins-sheet li span{flex:none;display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:50%;background:var(--forest);color:#fff;font-weight:700;font-size:.9rem}
+.ins-sheet li p{margin:.15rem 0 0;font-size:.97rem}
+.ins-btn{min-height:3.2rem;border:0;border-radius:99px;background:var(--forest);color:#fff;font:inherit;font-weight:700;font-size:1rem;cursor:pointer}
