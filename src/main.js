@@ -16,6 +16,7 @@ import { mountParcel } from './screens/parcel.js';
 import { mountWeather } from './screens/weather.js';
 import { mountProfile, mountLang, mountSettings, mountHelp, mountSync } from './screens/profile.js';
 import { applyFontSize } from './components/prefs.js';
+import './components/install.js';
 
 const app = document.getElementById('app');
 const splash = document.getElementById('splash');
@@ -51,3 +52,13 @@ addEventListener('online', async () => { const n = await api.syncPending(); if (
 
 // Splash court : le logo reste 1,4 s puis disparaît en fondu.
 setTimeout(() => { app.hidden = false; splash.classList.add('gone'); setTimeout(() => splash.remove(), 500); }, 1400);
+
+// Service worker : installation, ouverture sans réseau, mises à jour automatiques.
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const w = reg.installing;
+      if (w) w.addEventListener('statechange', () => { if (w.state === 'installed' && navigator.serviceWorker.controller) toast('Mise à jour installée. Elle sera active à la prochaine ouverture.'); });
+    });
+  }).catch(() => { /* l'application marche sans */ });
+}
